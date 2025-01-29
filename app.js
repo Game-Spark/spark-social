@@ -1,6 +1,6 @@
-// Your Firebase configuration and initialization
+// Firebase Initialization and Authentication Setup
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCm7rdQlGd-nO7mePxT2vHnY4H1hawE9ks",
@@ -15,7 +15,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Show Login Form
+// Check if user is logged in
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, show the live chat
+    document.getElementById('chat').style.display = 'block';
+    document.getElementById('loginButton').style.display = 'none';  // Hide login button
+    document.getElementById('signupButton').style.display = 'none'; // Hide signup button
+  } else {
+    // User is not signed in, hide the chat
+    document.getElementById('chat').style.display = 'none';
+    document.getElementById('loginButton').style.display = 'inline';  // Show login button
+    document.getElementById('signupButton').style.display = 'inline'; // Show signup button
+  }
+});
+
+// Function to show login form
 function showLogin() {
   document.getElementById('authForm').style.display = 'block';
   document.getElementById('authTitle').textContent = 'Login';
@@ -25,7 +40,7 @@ function showLogin() {
   };
 }
 
-// Show Signup Form
+// Function to show signup form
 function showSignup() {
   document.getElementById('authForm').style.display = 'block';
   document.getElementById('authTitle').textContent = 'Signup';
@@ -63,7 +78,7 @@ function loginUser() {
     });
 }
 
-// Close authentication form
+// Close the authentication form
 function closeAuthForm() {
   document.getElementById('authForm').style.display = 'none';
 }
